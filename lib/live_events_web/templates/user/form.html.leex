@@ -1,0 +1,24 @@
+<%= f = form_for @changeset, "#", [phx_submit: :save] %>
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :email %>
+  <%= text_input f, :email %>
+  <%= error_tag f, :email %>
+
+  <%= label f, :owner %>
+  <input type="checkbox" phx-click="validate_owner"></input>
+  <%= error_tag f, :owner %>
+
+  <%= for accolade <- @accolades do %>
+    <%= text_input :accolades, :name, value: accolade.name, id: "name-#{accolade.name}"%>
+  <% end %>
+
+  <button type="button" phx-click="add_accolade">+</button>
+  <button type="button" phx-click="remove_accolade">-</button>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+</form>
