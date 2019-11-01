@@ -10,7 +10,11 @@ defmodule LiveEventsWeb.UserLive do
 
     {:ok,
      assign(socket, %{
-       accolades: [%{name: "name-#{:rand.uniform(1000)}"}],
+       accolades: [
+         %{id: :rand.uniform(1000), name: "name-#{:rand.uniform(1000)}"},
+         %{id: :rand.uniform(1000), name: "name-#{:rand.uniform(1000)}"},
+         %{id: :rand.uniform(1000), name: "name-#{:rand.uniform(1000)}"}
+       ],
        user: user,
        changeset: Account.change_user(user)
      })}
@@ -22,17 +26,24 @@ defmodule LiveEventsWeb.UserLive do
     {:noreply, socket}
   end
 
+  def handle_event("validate_accolade", _, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("add_accolade", _, socket) do
     accolades = socket.assigns.accolades
-    accolades = [%{name: "name-#{:rand.uniform(1000)}"} | accolades]
+    accolades = accolades ++ [%{id: :rand.uniform(1000), name: "name-#{:rand.uniform(1000)}"}]
     {:noreply, assign(socket, %{accolades: accolades})}
   end
 
-  def handle_event("remove_accolade", _, socket) do
-    case socket.assigns.accolades do
-      [] -> {:noreply, assign(socket, %{accolades: []})}
-      [_h | t] -> {:noreply, assign(socket, %{accolades: t})}
-    end
+  def handle_event("remove_accolade", %{"id" => id}, socket) do
+    accolades = remove_accolade(socket.assigns.accolades, String.to_integer(id))
+    {:noreply, assign(socket, %{accolades: accolades})}
+  end
+
+  defp remove_accolade([]), do: []
+  defp remove_accolade(accolades, id) do
+    Enum.filter(accolades, fn ac -> ac.id != id end)
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do

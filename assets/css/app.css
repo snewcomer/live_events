@@ -1,3 +1,16 @@
 /* This file is for your main application css. */
 
 @import "./phoenix.css";
+
+.accolade-section {
+  display: flex;
+}
+.accolade-remove, .accolade-validate {
+  padding: 0 1em;
+}
+
+.accolade-validate {
+  background-color: white;
+  color: black;
+  margin: 0 0.5em;
+}

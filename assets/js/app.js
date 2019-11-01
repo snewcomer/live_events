@@ -17,5 +17,20 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
-let liveSocket = new LiveSocket("/live", Socket)
+function clearInput(e) {
+  // this requires a user to get the event and see if target is the specific button
+  // but b/c we attach events at the top level, this is an unecessary footgun
+  this.firstElementChild.value = '';
+}
+
+let Hooks = {}
+Hooks.clear = {
+  mounted() {
+    this.el.addEventListener("click", clearInput.bind(this.el));
+  }
+}
+
+
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks})
 liveSocket.connect()
+

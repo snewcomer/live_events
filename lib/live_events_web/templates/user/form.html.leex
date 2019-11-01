@@ -12,11 +12,20 @@
   <%= error_tag f, :owner %>
 
   <%= for accolade <- @accolades do %>
-    <%= text_input :accolades, :name, value: accolade.name, id: "name-#{accolade.name}"%>
+    <!-- trying to validate_accolade will also call the phx-hook="clear" as it bubbles and tries to punch through to the window.addEventListener bindClicks() -->
+    <!-- this may be a bad example, but illustrates the need for blocking code on any ancestor event listeners -->
+    <div class="accolade-section" phx-hook="clear">
+      <%= text_input :accolades, :name, value: accolade.name, id: "name-#{accolade.name}"%>
+      <button class="accolade-validate" type="button" phx-click="validate_accolade">validate</button>
+      <button
+        class="accolade-remove"
+        type="button"
+        phx-value-id="<%= accolade.id %>"
+        phx-click="remove_accolade">-</button>
+    </div>
   <% end %>
 
   <button type="button" phx-click="add_accolade">+</button>
-  <button type="button" phx-click="remove_accolade">-</button>
 
   <div>
     <%= submit "Save" %>
