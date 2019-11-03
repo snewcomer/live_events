@@ -16,7 +16,7 @@
     <!-- this may be a bad example, but illustrates the need for blocking code on any ancestor event listeners -->
     <div class="accolade-section" phx-hook="clear">
       <%= text_input :accolades, :name, value: accolade.name, id: "name-#{accolade.name}"%>
-      <button class="accolade-validate" type="button" phx-click="validate_accolade">validate</button>
+      <button class="accolade-validate" type="button" phx-click-once="true" phx-click="validate_accolade">validate</button>
       <button
         class="accolade-remove"
         type="button"
